@@ -27,6 +27,7 @@ def create_app():
     from app.routes.reservations import reservations_bp
     from app.routes.services import services_bp
     from app.routes.reservation_services import reservation_services_bp
+    from app.routes.reservation_rooms import reservation_rooms_bp
 
     app.register_blueprint(auth_bp,               url_prefix="/api/auth")
     app.register_blueprint(customers_bp,          url_prefix="/api/customers")
@@ -36,5 +37,6 @@ def create_app():
     app.register_blueprint(reservations_bp,       url_prefix="/api/reservations")
     app.register_blueprint(services_bp,           url_prefix="/api/services")
     app.register_blueprint(reservation_services_bp, url_prefix="/api/reservation-services")
+    app.register_blueprint(reservation_rooms_bp, url_prefix="/api/reservation-rooms")
 
     return app

@@ -20,10 +20,12 @@ def get_one(id):
 @jwt_required()
 def create():
     data = request.get_json()
+    checkin  = datetime.strptime(data["CheckInDate"],  "%Y-%m-%d").date()
+    checkout = datetime.strptime(data["CheckOutDate"], "%Y-%m-%d").date()
     res = Reservation(
         ReservationDate     = date.today(),
-        CheckInDate         = data["CheckInDate"],
-        CheckOutDate        = data["CheckOutDate"],
+        CheckInDate         = checkin,
+        CheckOutDate        = checkout,
         NumberOfAdults      = data.get("NumberOfAdults", 1),
         NumberOfChildren    = data.get("NumberOfChildren", 0),
         TotalAmount         = data.get("TotalAmount"),
@@ -44,8 +46,12 @@ def create():
 def update(id):
     res = Reservation.query.get_or_404(id)
     data = request.get_json()
-    for field in ["CheckInDate","CheckOutDate","NumberOfAdults","NumberOfChildren",
-                  "TotalAmount","ReservationStatus","SpecialRequests"]:
+    if "CheckInDate" in data:
+        res.CheckInDate = datetime.strptime(data["CheckInDate"], "%Y-%m-%d").date()
+    if "CheckOutDate" in data:
+        res.CheckOutDate = datetime.strptime(data["CheckOutDate"], "%Y-%m-%d").date()
+    for field in ["NumberOfAdults", "NumberOfChildren", "TotalAmount",
+                  "ReservationStatus", "SpecialRequests"]:
         if field in data:
             setattr(res, field, data[field])
     db.session.commit()

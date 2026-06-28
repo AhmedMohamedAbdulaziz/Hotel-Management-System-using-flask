@@ -25,11 +25,12 @@ def create():
         TotalPrice    = data.get("TotalPrice"),
         OrderDateTime = datetime.utcnow(),
         ReservationID = data["ReservationID"],
-        ServiceId_FK  = data["ServiceID"],
+        ServiceID  = data["ServiceID"],
         EmployeeID    = data["EmployeeID"],
     )
     db.session.add(rs)
     db.session.commit()
+    db.session.refresh(rs)
     return jsonify(rs.to_dict()), 201
 
 @reservation_services_bp.route("/<int:id>", methods=["DELETE"])
@@ -38,4 +39,4 @@ def delete(id):
     rs = ReservationService.query.get_or_404(id)
     db.session.delete(rs)
     db.session.commit()
-    return jsonify({"message": "Deleted"}), 200
+    return jsonify({"message": " deleted"}), 200  # 
